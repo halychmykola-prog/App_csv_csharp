@@ -15,9 +15,18 @@ namespace App_csv
 
         }
 
+
+        /*
+         * 
+         * PARTE FUNZIONI
+         * 
+         */
         static void Inserisci()
         {
-            
+            Console.WriteLine("Inserimento di un nuovo record");
+
+
+
         }
 
         // 2. Visualizzazione dei file 
@@ -38,9 +47,14 @@ namespace App_csv
             
         }
 
-
+        /*
+         * 
+         * PARTE MAIN
+         * 
+         */
         static void Main(string[] args)
         {
+
             bool esegui = true;
             int choice;// Variable to store the user's choice
 
