@@ -12,13 +12,6 @@ namespace App_csv
         {
             public int Index;
             public string OrganizationId;
-            public string Name;
-            public string Website;
-            public string Country;
-            public string Description;
-            public int Founded;
-            public string Industry;
-            public string NumberOfEmployees;
 
         }
 
@@ -67,6 +60,7 @@ namespace App_csv
                 {
                     case 1:
                         Console.WriteLine("Function Inserimento");
+
                         break;
                     case 2:
                         Console.WriteLine("Function Visualizzazione");
