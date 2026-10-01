@@ -15,17 +15,11 @@ namespace App_csv
             public string OrganizationId;
         }
 
-        static void Inserisci(OrganizationSample[] record1, ref int index1)
+        static void Inserisci(OrganizationSample[] record1, ref int index1, ref int insertindex, ref string insertId)
         {
-            string text = "Inserisci index";
-            Console.WriteLine(text);
-            record1[index1].Index = Convert.ToInt32(Console.ReadLine());
-            string text1 = "Inserisci OrganizationId";
-            Console.WriteLine(text1);
-            record1[index1].OrganizationId = Console.ReadLine();
+            record1[index1].Index = insertindex;
+            record1[index1].OrganizationId = insertId;
             index1++;
-
-
         }
 
         // 2. Visualizzazione dei file 
@@ -65,28 +59,14 @@ namespace App_csv
         static void Modifica(OrganizationSample[] records, ref int dimensione, ref int searchIndex, string newOrganizationId, int newIndex)
         {
             int result = Program.Cerca(records, ref dimensione, ref searchIndex);
-            string text1 = "Funzione Modifica ha avuto successo";
-            string text2 = "Funzione Modifica non ha avuto successo";
-
             if(result != -1)
             {
                 
                 records[result].Index = newIndex;
                 records[result].OrganizationId = newOrganizationId;
-                Console.WriteLine("");
-                Console.WriteLine(text1);
-            }
-            else
-            {
                 
-                Console.WriteLine("");
-                Console.WriteLine(text2);
             }
-
-
-
-
-
+            
 
 
         }
@@ -95,9 +75,7 @@ namespace App_csv
         static void Cancella(OrganizationSample[] records, ref int dimensione, ref int searchIndex)
         {
             int result = Program.Cerca(records, ref dimensione, ref searchIndex);
-            string text1 = "Funzione Cancellazione ha avuto successo";
-            string text2 = "Funzione Cancellazione non ha avuto successo";
-
+            
 
             if (result != -1)
             {
@@ -105,8 +83,7 @@ namespace App_csv
                 {
                     records[result].Index = -1;
                     records[result].OrganizationId = null;
-                    Console.WriteLine("");
-                    Console.WriteLine(text1);
+                   
                 }
                 else
                 {
@@ -115,35 +92,13 @@ namespace App_csv
                         records[i] = records[i + 1];
                     }
                     dimensione--;
-                    Console.WriteLine("");
-                    Console.WriteLine(text2);
+                    
                 }
 
 
-
-
-                /*
-                records[result].Index = -1;
-                records[result].OrganizationId = null;
-                Console.WriteLine("");
-                Console.WriteLine(text1);
-                */
             }
             
-            /*
-            else
-            {
-
-                Console.WriteLine("");
-                Console.WriteLine(text2);
-
-
-
-
-
-
-            }
-            */
+            
         }
 
 
@@ -173,7 +128,15 @@ namespace App_csv
                 {
                     case 1:
                         Console.WriteLine("Function Inserimento Started");
-                        Program.Inserisci(records, ref dimensione);
+                        Console.WriteLine("Inserisci index");
+                        int insertindex = Convert.ToInt32(Console.ReadLine());
+                        Console.WriteLine("");
+
+                        string insertId;
+                        Console.WriteLine("Inserisci OrganizationId");
+                        insertId = Console.ReadLine();
+
+                        Program.Inserisci(records, ref dimensione, ref insertindex, ref insertId);
                         Console.WriteLine("Function Inserimento Ended");
                         Console.WriteLine("");
                         break;
