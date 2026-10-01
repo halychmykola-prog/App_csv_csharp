@@ -122,6 +122,21 @@ namespace App_csv
 
 
 
+        static void LetturaFile(OrganizationSample[] records, ref int dimensione)
+        {
+           
+        }
+
+
+        static void ScritturaFile(OrganizationSample[] records, ref int dimensione)
+        {
+
+        }
+
+
+
+
+
         static void Main(string[] args)
         {
             bool esegui = true;
