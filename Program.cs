@@ -102,6 +102,25 @@ namespace App_csv
         }
 
 
+        static int Somma(OrganizationSample[] records, ref int dimensione, ref int valore)
+        {
+
+            int result = 0; 
+            for (int i = 0; i < dimensione; i++)
+            {
+                if(records[i].Index >= valore)
+                {
+                    result += records[i].Index;
+                }
+
+
+            }
+            return result;
+        }
+
+
+
+
 
         static void Main(string[] args)
         {
