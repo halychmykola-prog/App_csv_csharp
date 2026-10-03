@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace App_csv
 {
@@ -15,7 +16,7 @@ namespace App_csv
             public string OrganizationId;
         }
 
-        static void Inserisci(OrganizationSample[] record1, ref int index1, ref int insertindex, ref string insertId)
+        static void Inserisci(OrganizationSample[] record1, ref int index1, int insertindex,  string insertId)
         {
             record1[index1].Index = insertindex;
             record1[index1].OrganizationId = insertId;
@@ -41,7 +42,7 @@ namespace App_csv
         static int Cerca(OrganizationSample[] records, ref int dimensione, ref int searchIndex)
         {
             int result = -1; // se non trovato ritorna -1
-            for(int i = 0; i < dimensione; i++)
+            for (int i = 0; i < dimensione; i++)
             {
                 if (records[i].Index == searchIndex)
                 {
@@ -59,14 +60,14 @@ namespace App_csv
         static void Modifica(OrganizationSample[] records, ref int dimensione, ref int searchIndex, string newOrganizationId, int newIndex)
         {
             int result = Program.Cerca(records, ref dimensione, ref searchIndex);
-            if(result != -1)
+            if (result != -1)
             {
-                
+
                 records[result].Index = newIndex;
                 records[result].OrganizationId = newOrganizationId;
-                
+
             }
-            
+
 
 
         }
@@ -75,40 +76,40 @@ namespace App_csv
         static void Cancella(OrganizationSample[] records, ref int dimensione, ref int searchIndex)
         {
             int result = Program.Cerca(records, ref dimensione, ref searchIndex);
-            
+
 
             if (result != -1)
             {
-                if (records[result+1].OrganizationId == null)
+                if (records[result + 1].OrganizationId == null)
                 {
                     records[result].Index = -1;
                     records[result].OrganizationId = null;
-                   
+
                 }
                 else
                 {
-                    for(int i = result; i < dimensione - 1; i++)
+                    for (int i = result; i < dimensione - 1; i++)
                     {
                         records[i] = records[i + 1];
                     }
                     dimensione--;
-                    
+
                 }
 
 
             }
-            
-            
+
+
         }
 
 
         static int Somma(OrganizationSample[] records, ref int dimensione, ref int valore)
         {
 
-            int result = 0; 
+            int result = 0;
             for (int i = 0; i < dimensione; i++)
             {
-                if(records[i].Index >= valore)
+                if (records[i].Index >= valore)
                 {
                     result += records[i].Index;
                 }
@@ -122,9 +123,51 @@ namespace App_csv
 
 
 
-        static void LetturaFile(OrganizationSample[] records, ref int dimensione)
+        static void LetturaFile(OrganizationSample[] records, ref int dimensione, string filename,ref bool check1)
         {
-           
+            if(File.Exists(filename))
+            {
+                
+                
+                using (StreamReader sr = new StreamReader(filename))
+                {
+                    string line;
+                    while ((line = sr.ReadLine()) != null)
+                    {
+
+                        if (string.IsNullOrWhiteSpace(line))
+                            continue;
+
+                        if (records != null && dimensione >= records.Length)
+                        {
+                            
+                            break;
+                        }
+
+
+                        string[] parts = line.Split(',');
+                        if (parts.Length == 2)
+                        {
+                            int index;
+                            if (int.TryParse(parts[0], out index))
+                            {
+                                string organizationId = parts[1];
+                                Program.Inserisci(records, ref dimensione, index, organizationId);
+                            }
+                        }
+                    }
+
+
+
+                }
+                check1 = true;
+
+            }
+            else
+            {
+                check1 = false;
+            }
+
         }
 
 
@@ -143,7 +186,7 @@ namespace App_csv
             int choice;// Variable to store the user's choice
             OrganizationSample[] records = new OrganizationSample[5]; // Array to store records
             int dimensione = 0;
-            
+
 
             while (esegui)
             {
@@ -152,12 +195,14 @@ namespace App_csv
                 Console.WriteLine("2. View records");
                 Console.WriteLine("3. Modify record");
                 Console.WriteLine("4. Delete record");
-                Console.WriteLine("5. Exit");
+                Console.WriteLine("5. Carica dati da file");
+                Console.WriteLine("6. Salva dati in file");
+                Console.WriteLine("7. Exit");
                 Console.WriteLine("");
                 choice = Convert.ToInt32(Console.ReadLine());
                 Console.WriteLine();
-               
-                
+
+
                 switch (choice)
                 {
                     case 1:
@@ -170,7 +215,7 @@ namespace App_csv
                         Console.WriteLine("Inserisci OrganizationId");
                         insertId = Console.ReadLine();
 
-                        Program.Inserisci(records, ref dimensione, ref insertindex, ref insertId);
+                        Program.Inserisci(records, ref dimensione,  insertindex,  insertId);
                         Console.WriteLine("Function Inserimento Ended");
                         Console.WriteLine("");
                         break;
@@ -193,7 +238,7 @@ namespace App_csv
                         string newOrganizationId1;
                         Console.WriteLine("inserisci nuovo OrganizationId:");
                         newOrganizationId1 = Console.ReadLine();
-                        
+
 
                         Program.Modifica(records, ref dimensione, ref changeindex, newOrganizationId1, newIndex);
                         Console.WriteLine("");
@@ -211,11 +256,31 @@ namespace App_csv
                         deleteindex = Convert.ToInt32(Console.ReadLine());
                         Program.Cancella(records, ref dimensione, ref deleteindex);
                         Console.WriteLine("");
-
-
-
                         break;
+
+
+
                     case 5:
+                        Console.WriteLine("inserisci path del file:");
+                        string filepath = Console.ReadLine();
+                        bool check = false;
+                        Program.LetturaFile(records, ref dimensione, filepath, ref check);
+                        if(check)
+                        {
+                            Console.WriteLine("Eseguito");
+                        }
+                        else
+                        {
+                            Console.WriteLine("Errore");
+                        }
+                        Console.WriteLine("");
+
+
+                       break;
+
+
+
+                    case 7:
                         esegui = false;
                         break;
                     default:
