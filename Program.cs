@@ -127,24 +127,26 @@ namespace App_csv
         {
             if(File.Exists(filename))
             {
-                
-                
+
+                //apro file e chiudo alla fine
                 using (StreamReader sr = new StreamReader(filename))
                 {
+                    // leggo il file riga per riga
                     string line;
                     while ((line = sr.ReadLine()) != null)
                     {
-
+                        //se la riga è vuota, passo alla prossima
                         if (string.IsNullOrWhiteSpace(line))
                             continue;
 
+                        //se l'array è pieno, esco dal ciclo
                         if (records != null && dimensione >= records.Length)
                         {
                             
                             break;
                         }
 
-
+                        // divido la riga in due parti separate da una virgola
                         string[] parts = line.Split(',');
                         if (parts.Length == 2)
                         {
@@ -171,8 +173,33 @@ namespace App_csv
         }
 
 
-        static void ScritturaFile(OrganizationSample[] records, ref int dimensione)
+        static void ScritturaFile(OrganizationSample[] records, int dimensione, string filename, ref bool check2)
         {
+            try
+            {
+                // apro file e chiudo alla fine
+                using (StreamWriter sw = new StreamWriter(filename, false))
+                {
+                    
+
+                    
+                    for (int i = 0; i < dimensione; i++)
+                    {
+                        // vreazione della stringa 
+                        string line = $"{records[i].Index};{records[i].OrganizationId}";
+
+                        // metto la stringa nel file
+                        sw.WriteLine(line);
+                    }
+                }
+
+                check2 = true;
+            }
+            catch (Exception ex)
+            {
+                //Console.WriteLine($"errore in salvataggio file. Motivo: {ex.Message}");
+                check2 = false;
+            }
 
         }
 
@@ -183,7 +210,7 @@ namespace App_csv
         static void Main(string[] args)
         {
             bool esegui = true;
-            int choice;// Variable to store the user's choice
+            int choice;// variabile per la scelta dell'utente
             OrganizationSample[] records = new OrganizationSample[5]; // Array to store records
             int dimensione = 0;
 
@@ -277,6 +304,23 @@ namespace App_csv
 
 
                        break;
+
+
+                    case 6:
+                        Console.WriteLine("inserisci path del file:");
+                        string filepath2 = Console.ReadLine();
+                        bool check2 = false;
+                        Program.ScritturaFile(records, dimensione, filepath2, ref check2);
+                        if (check2)
+                        {
+                            Console.WriteLine("Eseguito");
+                        }
+                        else
+                        {
+                            Console.WriteLine("Errore");
+                        }
+                        Console.WriteLine("");
+                        break;
 
 
 
