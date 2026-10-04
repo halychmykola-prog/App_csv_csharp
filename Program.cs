@@ -103,7 +103,7 @@ namespace App_csv
         }
 
 
-        static int Somma(OrganizationSample[] records, ref int dimensione, ref int valore)
+        static int Somma(OrganizationSample[] records, ref int dimensione, int valore)
         {
 
             int result = 0;
@@ -224,7 +224,8 @@ namespace App_csv
                 Console.WriteLine("4. Delete record");
                 Console.WriteLine("5. Carica dati da file");
                 Console.WriteLine("6. Salva dati in file");
-                Console.WriteLine("7. Exit");
+                Console.WriteLine("7. Somma valori");
+                Console.WriteLine("8. Exit");
                 Console.WriteLine("");
                 choice = Convert.ToInt32(Console.ReadLine());
                 Console.WriteLine();
@@ -323,12 +324,20 @@ namespace App_csv
                         break;
 
 
-
                     case 7:
+                        Console.WriteLine("inserisci valore per somma:");
+                        int valore = Convert.ToInt32(Console.ReadLine());
+                        int somma = Program.Somma(records, ref dimensione, valore);
+                        Console.WriteLine("La somma è: " + somma);
+                        Console.WriteLine("");
+                        break;
+
+
+                    case 8:
                         esegui = false;
                         break;
                     default:
-                        Console.WriteLine("Invalid choice. Please try again.");
+                        Console.WriteLine("Invalid choice. Provi ancora.");
                         break;
                 }
             }
